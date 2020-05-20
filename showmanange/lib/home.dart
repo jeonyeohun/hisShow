@@ -12,13 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:csee/2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import '1.dart';
+import 'show_list.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -34,14 +29,15 @@ class _HomePageState extends State<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final page_title  = ['공연예약', '예약확인', '내 공연 관리'];
+
     Widget child;
     switch (_currentIndex) {
       case 0:
-        child = First();
+        child = ShowList();
         break;
       case 1:
-        child = Second();
+        child = null;
         break;
       case 2:
         child = FlutterLogo(colors: Colors.red);
@@ -49,18 +45,19 @@ class _HomePageState extends State<HomePage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('공연목록'),
-        actions: <Widget>[
+        title: Text(page_title[_currentIndex]),
+        actions: _currentIndex == 2 ? <Widget>[
           IconButton(
             icon: Icon(Icons.add),
             onPressed: (){},
           )
-        ],
+        ] : null
       ),
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         selectedItemColor: Colors.redAccent,
+        unselectedItemColor: Colors.grey,
         onTap: onTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -69,11 +66,11 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text('예약관리'),
+            title: Text('예약확인'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('설정'),
+            icon: Icon(Icons.audiotrack),
+            title: Text('내 공연 관리'),
           ),
         ],
       ),
