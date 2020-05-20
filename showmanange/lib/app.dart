@@ -16,6 +16,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'details.dart';
 import 'home.dart';
 import 'login.dart';
 
@@ -29,7 +30,9 @@ class Start extends StatelessWidget {
       ),
       home: HomePage(),
       initialRoute: '/login',
+
       routes: {
+        '/details' : (context) => DetailPage(),
       },
       onGenerateRoute: _getRoute,
     );
