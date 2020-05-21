@@ -173,7 +173,7 @@
         <entry key="google_sign_in">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.4.6/lib" />
+              <option value="$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.5.1/lib" />
             </list>
           </value>
         </entry>
@@ -215,7 +215,7 @@
         <entry key="image_picker">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.6+1/lib" />
+              <option value="$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.6+4/lib" />
             </list>
           </value>
         </entry>
@@ -390,13 +390,13 @@
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.1.1+2/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.1.5/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.7/lib" />
-      <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.4.6/lib" />
+      <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.5.1/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_platform_interface-1.1.2/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_web-0.9.1/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.12.1/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-3.1.4/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/image-2.1.4/lib" />
-      <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.6+1/lib" />
+      <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.6+4/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-1.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.15.8/lib" />
       <root url="file://$PROJECT_DIR$/../../MobileAppDev/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.1+1/lib" />
