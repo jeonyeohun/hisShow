@@ -13,9 +13,11 @@
 // limitations under the License.
 
 
+import 'package:csee/myShow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'add.dart';
 import 'details.dart';
 import 'home.dart';
 import 'login.dart';
@@ -33,6 +35,8 @@ class Start extends StatelessWidget {
 
       routes: {
         '/details' : (context) => DetailPage(),
+        '/mypage' : (context) => MyPage(),
+        '/addpage' : (context) => AddPage(),
       },
       onGenerateRoute: _getRoute,
     );
