@@ -14,6 +14,7 @@
 
 import 'package:flutter/material.dart';
 import 'show_list.dart';
+import 'mypage.dart';
 
 class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
@@ -27,9 +28,10 @@ class _HomePageState extends State<HomePage> {
       _currentIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    final page_title  = ['공연예약', '예약확인', '내 공연 관리'];
+    final page_title = ['공연예약', '예약확인', '내 공연 관리'];
 
     Widget child;
     switch (_currentIndex) {
@@ -40,19 +42,22 @@ class _HomePageState extends State<HomePage> {
         child = null;
         break;
       case 2:
-        child = FlutterLogo(colors: Colors.red);
+        child = MyPage();
         break;
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(page_title[_currentIndex]),
-        actions: _currentIndex == 2 ? <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: (){},
-          )
-        ] : null
-      ),
+          title: Text(page_title[_currentIndex]),
+          actions: _currentIndex == 2
+              ? <Widget>[
+                  FlatButton(
+                    child: Text('새공연'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/addpage');
+                    },
+                  )
+                ]
+              : null),
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
