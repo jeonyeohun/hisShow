@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-import 'package:csee/myShow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +19,7 @@ import 'add.dart';
 import 'details.dart';
 import 'home.dart';
 import 'login.dart';
+import 'mypage.dart';
 
 class Start extends StatelessWidget {
   @override
