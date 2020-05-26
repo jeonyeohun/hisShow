@@ -52,7 +52,7 @@ class ShowListState extends State<ShowList> {
   Widget _buildItems(BuildContext context, DocumentSnapshot data) {
     final record = Record.fromSnapshot(data);
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
       height: 100,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -85,22 +85,23 @@ class ShowListState extends State<ShowList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   AutoSizeText(
-                    '[' + record.group + '] ',
+                    record.group,
                   ),
                   AutoSizeText(
-                    record.title,
+                    record.title.toUpperCase(),
                     minFontSize: 16,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   AutoSizeText(
-                    record.date.toDate().month.toString()+ '월' + ' ' + record.date.toDate().day.toString() + '일',
+                    record.date.month.toString()+ '월' + ' ' + record.date.day.toString() + '일',
 
                   ),
                 ],
               ),
             ),
+            Divider(color: Colors.redAccent,),
             FlatButton(
-              child: Text('더보기'),
+              child: Text('예약하기'),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
