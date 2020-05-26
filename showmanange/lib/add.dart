@@ -1,4 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csee/seat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -9,11 +14,50 @@ class AddPage extends StatefulWidget {
 }
 
 class AddPageSate extends State<AddPage> {
-  final TextEditingController titleText = TextEditingController();
-  final TextEditingController priceText = TextEditingController();
-  final TextEditingController desText = TextEditingController();
+  static final TextEditingController titleText = TextEditingController();
+  static final TextEditingController priceText = TextEditingController();
+  static final TextEditingController desText = TextEditingController();
+  static final TextEditingController bankText = TextEditingController();
+  static final TextEditingController accountText = TextEditingController();
+  static final TextEditingController ownerText = TextEditingController();
+  static final TextEditingController groupdesText = TextEditingController();
+  static final TextEditingController placeText = TextEditingController();
 
-  List<String> field = ['공연 이름', '단체 이름', '공연 설명', '예금주', '계좌 번호'];
+  final String uuid = Uuid().v1();
+  DateTime showDate = null;
+  DateTime showTime = null;
+
+  static int row;
+  static int col;
+
+  String datetime2date(DateTime date) {
+    return ' ' + date.month.toString() + '월' + date.day.toString() + '일';
+  }
+
+  String datetime2time(DateTime date) {
+    return ' ' + date.hour.toString() + '시' + date.minute.toString() + '분';
+  }
+
+  Map<String, TextEditingController> field = {
+    '공연 이름': titleText,
+    '단체 이름': ownerText,
+    '단체 소개' : groupdesText,
+    '공연 설명': desText,
+    '가격': priceText,
+    '공연 장소' : placeText,
+  };
+
+  @override
+  void initState() {
+
+    titleText.clear();
+    desText.clear();
+    ownerText.clear();
+    priceText.clear();
+    bankText.clear();
+    accountText.clear();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +68,7 @@ class AddPageSate extends State<AddPage> {
         body: ListView(
           children: <Widget>[
             Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 ImageSection(),
                 Container(
@@ -31,7 +76,7 @@ class AddPageSate extends State<AddPage> {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(width: 0.2, color: Colors.grey),
@@ -52,17 +97,64 @@ class AddPageSate extends State<AddPage> {
                                           color: Colors.blueGrey,
                                           size: 13,
                                         ),
-                                        Text(' 날짜등록')
+                                        showDate == null
+                                            ? Text(' 날짜등록')
+                                            : Text(datetime2date(showDate)),
                                       ]),
                                       onPressed: () {
-                                        showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(2019),
-                                                lastDate: DateTime(2022))
-                                            .then((date) {
-                                          setState(() {});
-                                        });
+                                        showModalBottomSheet(
+                                            context: context,
+                                            builder: (BuildContext builder) {
+                                              return Container(
+                                                height: 150,
+                                                child: CupertinoDatePicker(
+                                                  use24hFormat: true,
+                                                  mode: CupertinoDatePickerMode
+                                                      .date,
+                                                  initialDateTime:
+                                                      DateTime.now(),
+                                                  onDateTimeChanged:
+                                                      (DateTime value) {
+                                                    setState(() {
+                                                      showDate = value;
+                                                    });
+                                                  },
+                                                ),
+                                              );
+                                            });
+                                      }),
+                                  FlatButton(
+                                      child: Row(children: <Widget>[
+                                        Icon(
+                                          Icons.access_time,
+                                          color: Colors.blueGrey,
+                                          size: 13,
+                                        ),
+                                        showTime == null
+                                            ? Text(' 시간등록')
+                                            : Text(datetime2time(showTime)),
+                                      ]),
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            builder: (BuildContext builder) {
+                                              return Container(
+                                                height: 150,
+                                                child: CupertinoDatePicker(
+                                                  use24hFormat: true,
+                                                  mode: CupertinoDatePickerMode
+                                                      .time,
+                                                  initialDateTime:
+                                                      DateTime.now(),
+                                                  onDateTimeChanged:
+                                                      (DateTime value) {
+                                                    setState(() {
+                                                      showTime = value;
+                                                    });
+                                                  },
+                                                ),
+                                              );
+                                            });
                                       }),
                                   FlatButton(
                                       child: Row(children: <Widget>[
@@ -71,16 +163,24 @@ class AddPageSate extends State<AddPage> {
                                           color: Colors.blueGrey,
                                           size: 13,
                                         ),
-                                        Text(' 좌석등록')
+                                        row == null
+                                            ? Text(' 좌석등록')
+                                            : Text(' ' +
+                                                row.toString() +
+                                                ' X ' +
+                                                col.toString())
                                       ]),
-                                      onPressed: () {
-                                        showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(2019),
-                                                lastDate: DateTime(2022))
-                                            .then((date) {
-                                          setState(() {});
+                                      onPressed: () async {
+                                        List<double> chairs =
+                                            await Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                              fullscreenDialog: true,
+                                              builder: (context) => SeatPage()),
+                                        );
+                                        setState(() {
+                                          row = chairs[0].toInt();
+                                          col = chairs[1].toInt();
                                         });
                                       }),
                                 ],
@@ -94,12 +194,71 @@ class AddPageSate extends State<AddPage> {
                       ),
                       Container(
                         child: Column(
-                          children:
-                              field.map((e) => _buildInputBox(e)).toList(),
-                        ),
+                            children: field.entries
+                                .map((e) => _buildInputBox(e))
+                                .toList()),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Flexible(
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 5.5, 0, 5.5),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  focusColor: Color.fromRGBO(255, 178, 174, 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromRGBO(255, 178, 174, 10),
+                                        width: 2.0),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  labelText: '은행',
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: Colors.blueGrey),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    borderSide: BorderSide(),
+                                  ),
+                                ),
+                                controller: bankText,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 5.5, 0, 5.5),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  focusColor: Color.fromRGBO(255, 178, 174, 10),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromRGBO(255, 178, 174, 10),
+                                        width: 2.0),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  labelText: '계좌번호',
+                                  labelStyle: TextStyle(
+                                      fontSize: 13, color: Colors.blueGrey),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    borderSide: BorderSide(),
+                                  ),
+                                ),
+                                controller: accountText,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 10,
                       ),
                       RaisedButton(
                         color: Colors.redAccent,
@@ -107,7 +266,17 @@ class AddPageSate extends State<AddPage> {
                         child: Text("등록하기"),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30)),
-                        onPressed: () {},
+                        onPressed: () {
+                          _ImageSectionState._image == null
+                              ? showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      CupertinoAlertDialog(
+                                          title: Text('사진을 등록해주세요!')))
+                              : createItem();
+                          Navigator.of(context).pop();
+
+                        },
                       ),
                     ],
                   ),
@@ -118,28 +287,62 @@ class AddPageSate extends State<AddPage> {
         ));
   }
 
-  Widget _buildInputBox(String labelText) {
+  Widget _buildInputBox(MapEntry<String, TextEditingController> map) {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 5.5, 0, 5.5),
-      height: 50,
-      child: TextField(
-        decoration: InputDecoration(
-          focusColor: Color.fromRGBO(255, 178, 174, 10),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                color: Color.fromRGBO(255, 178, 174, 10), width: 2.0),
-            borderRadius: BorderRadius.circular(15.0),
+      //height: 50,
+      child: TextFormField(
+          maxLines: map.value == desText || map.value == groupdesText ? 10 : 1,
+          decoration: InputDecoration(
+            focusColor: Color.fromRGBO(255, 178, 174, 10),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                  color: Color.fromRGBO(255, 178, 174, 10), width: 2.0),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            labelText: map.key,
+            labelStyle: TextStyle(fontSize: 13, color: Colors.blueGrey),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide(),
+            ),
           ),
-          labelText: labelText,
-          labelStyle: TextStyle(fontSize: 13, color: Colors.blueGrey),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15.0),
-            borderSide: BorderSide(),
-          ),
-        ),
-        controller: titleText,
-      ),
+          controller: map.value),
     );
+  }
+
+  void createItem() async {
+    final FirebaseUser userID = await FirebaseAuth.instance.currentUser();
+    String uid = userID.uid;
+    String imgURL = await uploadImage();
+    Firestore.instance.collection('shows').add({
+      'title': titleText.text,
+      'description': desText.text,
+      'date': showDate,
+      'time': showTime,
+      'price': priceText.text,
+      'voteList': [],
+      'uid': uid,
+      'imageURL': imgURL,
+      'group' : ownerText.text,
+      'sits': [],
+      'bank': bankText.text,
+      'bankAccount': accountText.text,
+      'groupDescription':groupdesText.text,
+      'place' : placeText.text,
+    });
+  }
+
+  Future<String> uploadImage() async {
+    File img = _ImageSectionState._image;
+    if (img != null) {
+      StorageReference ref =
+          FirebaseStorage.instance.ref().child(uuid).child('image.jpg');
+      StorageUploadTask uploadTask = ref.putFile(img);
+      var url = await (await uploadTask.onComplete).ref.getDownloadURL();
+      return url.toString();
+    }
+    return null;
   }
 }
 
