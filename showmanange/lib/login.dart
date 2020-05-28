@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:csee/userInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -28,11 +29,6 @@ class SignInPageState extends State<SignInPage> {
         );
       }),
     );
-  }
-
-  // Example code for sign out.
-  void _signOut() async {
-    await _auth.signOut();
   }
 }
 
@@ -91,6 +87,7 @@ class _AnonymouslySignInSectionState extends State<_AnonymouslySignInSection> {
       if (user != null) {
         _success = true;
         _userID = user.uid;
+        UserInfoRecord.currentUser = user;
         Navigator.pop(context);
       } else {
         _success = false;
@@ -151,6 +148,7 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
       if (user != null) {
         _success = true;
         _userID = user.uid;
+        UserInfoRecord.currentUser = user;
         Navigator.pop(context);
       } else {
         _success = false;
