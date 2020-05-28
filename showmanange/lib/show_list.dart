@@ -21,9 +21,24 @@ class ShowListState extends State<ShowList> {
     );
   }
 
+  String timeParse(DateTime dt) {
+    String ret = '';
+    if (dt.hour.toInt() > 12) {
+      ret += '오후 ';
+    } else {
+      ret += '오전 ';
+    }
+
+    return ret +
+        (dt.hour.toInt() % 12).toString() +
+        '시 ' +
+        dt.minute.toString() +
+        '분';
+  }
+
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('shows').snapshots(),
+        stream: Firestore.instance.collection('Shows').where('date', isGreaterThanOrEqualTo: DateTime.now()).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Scaffold();
           return _buildList(context, snapshot.data.documents);
@@ -94,7 +109,11 @@ class ShowListState extends State<ShowList> {
                   ),
                   AutoSizeText(
                     record.date.month.toString()+ '월' + ' ' + record.date.day.toString() + '일',
-
+                    maxFontSize: 13,
+                  ),
+                  AutoSizeText(
+                    timeParse(record.time),
+                    maxFontSize: 12,
                   ),
                 ],
               ),
