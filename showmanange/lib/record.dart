@@ -22,7 +22,7 @@ class Record {
       : assert(map['title'] != null),
         title = map['title'],
         date = map['date'].toDate(),
-  time = map['time'].toDate(),
+        time = map['time'].toDate(),
         description = map['description'],
         uid = map['uid'],
         voteList = map['voteList'],
