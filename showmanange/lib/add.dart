@@ -26,9 +26,7 @@ class AddPageSate extends State<AddPage> {
   final String uuid = Uuid().v1();
   DateTime showDate = null;
   DateTime showTime = null;
-
-  static int row;
-  static int col;
+  static Map<dynamic, dynamic> seats;
 
   String datetime2date(DateTime date) {
     return ' ' + date.month.toString() + '월' + date.day.toString() + '일';
@@ -56,6 +54,9 @@ class AddPageSate extends State<AddPage> {
     priceText.clear();
     bankText.clear();
     accountText.clear();
+    groupdesText.clear();
+    placeText.clear();
+    seats = null;
     super.initState();
   }
 
@@ -163,24 +164,21 @@ class AddPageSate extends State<AddPage> {
                                           color: Colors.blueGrey,
                                           size: 13,
                                         ),
-                                        row == null
+                                        seats == null
                                             ? Text(' 좌석등록')
-                                            : Text(' ' +
-                                                row.toString() +
-                                                ' X ' +
-                                                col.toString())
+                                            : Text(' 총 ' + (seats.length).toString() + '좌석')
                                       ]),
                                       onPressed: () async {
-                                        List<double> chairs =
+                                        var returnSeat =
                                             await Navigator.push(
                                           context,
                                           CupertinoPageRoute(
                                               fullscreenDialog: true,
                                               builder: (context) => SeatPage()),
                                         );
+                                        print(returnSeat);
                                         setState(() {
-                                          row = chairs[0].toInt();
-                                          col = chairs[1].toInt();
+                                          seats = returnSeat;
                                         });
                                       }),
                                 ],
@@ -315,18 +313,19 @@ class AddPageSate extends State<AddPage> {
     final FirebaseUser userID = await FirebaseAuth.instance.currentUser();
     String uid = userID.uid;
     String imgURL = await uploadImage();
-    Firestore.instance.collection('shows').add({
+
+    DocumentReference ref = await Firestore.instance.collection('Shows').add({
       'title': titleText.text,
       'description': desText.text,
       'date': showDate,
       'time': showTime,
       'price': priceText.text,
       'voteList': [],
-      'uid': uid,
       'imageURL': imgURL,
       'group' : ownerText.text,
-      'sits': [],
-      'bank': bankText.text,
+      'uid' : uid,
+      'seats': seats,
+      'bank' : bankText.text,
       'bankAccount': accountText.text,
       'groupDescription':groupdesText.text,
       'place' : placeText.text,
