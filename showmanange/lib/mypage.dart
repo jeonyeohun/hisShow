@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csee/userInfo.dart';
 import 'package:flutter/cupertino.dart';
-import 'details.dart';
+import 'mod.dart';
 import 'record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +155,9 @@ class MyPageState extends State<MyPage> {
                             child: AutoSizeText("정보 수정"),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30)),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ModPage(record)));
+                            },
                           ),
                         ],
                       )
