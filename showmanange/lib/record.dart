@@ -8,7 +8,7 @@ class Record {
   final String uid;
   final List<dynamic> voteList;
   final String imageURL;
-  final List<dynamic> sits;
+  final Map<dynamic, dynamic> seats;
   final String bank;
   final String bankAccount;
   final String price;
@@ -27,13 +27,13 @@ class Record {
         uid = map['uid'],
         voteList = map['voteList'],
         imageURL = map['imageURL'],
-        sits = map['sits'],
         bank = map['bank'],
         bankAccount = map['bankAccount'],
         price = map['price'],
         group = map['group'],
         groupDes = map['groupDescription'],
-        place = map['place'];
+        place = map['place'],
+        seats = map['seats'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
