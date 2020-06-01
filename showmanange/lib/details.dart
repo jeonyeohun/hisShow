@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csee/record.dart';
+import 'package:csee/reservation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/painting.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+Record record;
 
 class DetailPage extends StatefulWidget {
   final String docID;
@@ -14,18 +17,21 @@ class DetailPage extends StatefulWidget {
 }
 
 class DetailPageSate extends State<DetailPage> {
-
-  String timeParse(DateTime dt){
+  String timeParse(DateTime dt) {
     String ret = '';
-    if(dt.hour.toInt() > 12){
+    if (dt.hour.toInt() > 12) {
       ret += '오후 ';
-    }
-    else{
+    } else {
       ret += '오전 ';
     }
 
-    return ret + (dt.hour.toInt()%12).toString()+ '시 ' + dt.minute.toString() + '분';
+    return ret +
+        (dt.hour.toInt() % 12).toString() +
+        '시 ' +
+        dt.minute.toString() +
+        '분';
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +44,21 @@ class DetailPageSate extends State<DetailPage> {
         label: const Text('예약하기!'),
         backgroundColor: Colors.redAccent,
         elevation: 3,
-        onPressed: (null),
+        onPressed: () async {
+          Map initMap;
+          await Firestore.instance
+              .collection('Shows')
+              .document(widget.docID)
+              .get()
+              .then((DocumentSnapshot ds) {
+            initMap = ds['seats'];
+          });
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ReservationPage(widget.docID, initMap)));
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -47,7 +67,7 @@ class DetailPageSate extends State<DetailPage> {
   Widget _buildDetailBody(BuildContext context, String docID) {
     return StreamBuilder(
       stream:
-          Firestore.instance.collection('shows').document(docID).snapshots(),
+          Firestore.instance.collection('Shows').document(docID).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         return _buildDetail(context, snapshot.data);
@@ -60,9 +80,9 @@ class DetailPageSate extends State<DetailPage> {
       return Scaffold(
           body: Container(
         alignment: Alignment.center,
-        child: Text('Deleted!'),
+        child: Text('존재하지 않는 공연입니다'),
       ));
-    var record = Record.fromSnapshot(data);
+    record = Record.fromSnapshot(data);
     return ListView(
       children: <Widget>[
         Container(
@@ -178,7 +198,13 @@ class DetailPageSate extends State<DetailPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '공연일: ' + record.date.year.toString() + '년 '+ record.date.month.toString() +'월 '+ record.date.day.toString() +'일 ',
+                '공연일: ' +
+                    record.date.year.toString() +
+                    '년 ' +
+                    record.date.month.toString() +
+                    '월 ' +
+                    record.date.day.toString() +
+                    '일 ',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
             ],
