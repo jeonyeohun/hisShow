@@ -27,6 +27,10 @@ dependencies:
   uuid: ^1.0.0
   google_sign_in: ^4.4.1
   image_picker: ^0.6.5+3
+  flutter_cupertino_date_picker: ^1.0.26
+  table_calendar: ^2.2.3
+  neumorphic: ^0.3.0
+  auto_size_text: ^2.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
