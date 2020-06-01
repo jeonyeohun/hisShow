@@ -8,18 +8,17 @@ class SeatPage extends StatefulWidget {
 }
 
 class _SeatPageState extends State<SeatPage> {
-  static double chairsRow ;
-  static double chairsCol ;
-  List<List<bool>> chairs;
+  static double chairsRow;
+  static double chairsCol;
+  List<List<dynamic>> chairs;
 
-  initState(){
+  initState() {
     super.initState();
     chairsRow = 0;
     chairsCol = 0;
-    chairs = List<List<bool>>.generate(chairsRow.toInt(),
-            (i) => List<bool>.generate(chairsCol.toInt(), (j) => false));
+    chairs = List<List<dynamic>>.generate(chairsRow.toInt(),
+        (i) => List<dynamic>.generate(chairsCol.toInt(), (j) => false));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,17 +108,29 @@ class _SeatPageState extends State<SeatPage> {
                       borderRadius: BorderRadius.circular(30)),
                   onPressed: () {
                     setState(() {
-                      AddPageSate.row = chairsRow.toInt();
-                      AddPageSate.col = chairsCol.toInt();
                     });
-                    if(chairs.isEmpty) {
-                      chairs = List<List<bool>>.generate(
+                    if (chairs.isEmpty) {
+                      chairs = List<List<dynamic>>.generate(
                           chairsRow.toInt(),
-                              (i) =>
-                          List<bool>.generate(
+                          (i) => List<dynamic>.generate(
                               chairsCol.toInt(), (j) => false));
                     }
-                    Navigator.of(context).pop(chairs);
+
+                    Map<String, dynamic> result = new Map<String, dynamic>();
+                    for (int i = 0; i < chairs.length; i++) {
+                      for (int j = 0; j < chairs[0].length; j++) {
+                        print(i.toString() + ' ' + j.toString());
+                        result[String.fromCharCode(65 + i) +
+                            (j + 1).toString()] = chairs[i][j];
+                      }
+                    }
+                    result['row'] = chairsRow.toInt();
+                    result['col'] = chairsCol.toInt();
+
+                    print(result);
+
+
+                    Navigator.of(context).pop(result);
                   },
                 ),
                 RaisedButton(
