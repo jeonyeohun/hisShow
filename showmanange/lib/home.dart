@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:csee/reservelist.dart';
+import 'package:csee/userInfo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'show_list.dart';
 import 'mypage.dart';
@@ -29,9 +32,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final page_title = ['공연예약', '예약확인', '내 공연 관리'];
+    final page_title = ['공연목록', '예약확인', '내 공연 관리', ];
 
     Widget child;
     switch (_currentIndex) {
@@ -39,11 +43,13 @@ class _HomePageState extends State<HomePage> {
         child = ShowList();
         break;
       case 1:
-        child = null;
+        child = ReserveListPage();
         break;
       case 2:
+        print(UserInfoRecord.currentUser.uid);
         child = MyPage();
         break;
+
     }
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +57,7 @@ class _HomePageState extends State<HomePage> {
           actions: _currentIndex == 2
               ? <Widget>[
                   FlatButton(
-                    child: Text('새공연'),
+                    child: Text('새공연 등록'),
                     onPressed: () {
                       Navigator.pushNamed(context, '/addpage');
                     },
@@ -77,6 +83,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.audiotrack),
             title: Text('내 공연 관리'),
           ),
+
         ],
       ),
     );
