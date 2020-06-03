@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-        <string>Need to upload image</string>
-        <key>NSCameraUsageDescription</key>
-        <string>Need to upload image</string>
-        <key>NSMicrophoneUsageDescription</key>
-        <string>Need to upload image</string>
+	<string>Need to upload image</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need to upload image</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need to upload image</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -47,5 +47,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+        	<array>
+        	    <dict>
+        	        <key>CFBundleTypeRole</key>
+        	        <string>Editor</string>
+        	        <key>CFBundleURLSchemes</key>
+        	        <array>
+        	            <string>com.googleusercontent.apps.884347401923-rqds1c9ntsctc14l32lppb7vqtgt5rbf</string>
+        	        </array>
+        	   </dict>
+        	</array>
 </dict>
 </plist>
