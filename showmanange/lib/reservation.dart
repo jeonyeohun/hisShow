@@ -182,7 +182,12 @@ class ReservationPageState extends State<ReservationPage> {
                                                                   record
                                                                       .bankAccount),
                                                         );
-                                                        Text("클립보드로 복사되었어요!");
+                                                        showCupertinoModalPopup(
+                                                          context: context,
+                                                          builder: (context) => CupertinoAlertDialog(
+                                                            content: Text('클립보드로 복사되었어요!'),
+                                                          )
+                                                        );
                                                       },
                                                     ),
                                                   ],
@@ -200,7 +205,9 @@ class ReservationPageState extends State<ReservationPage> {
                                                             BorderRadius
                                                                 .circular(30),
                                                       ),
-                                                      onPressed: () {}),
+                                                      onPressed: () {
+                                                        Navigator.popUntil(context, (route) => route.isFirst);
+                                                      }),
                                                 ),
                                               ],
                                             ));
