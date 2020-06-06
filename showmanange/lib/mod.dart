@@ -13,8 +13,7 @@ import 'package:image_picker/image_picker.dart';
 Record record;
 
 class ModPage extends StatefulWidget {
-
-  ModPage(Record record2){
+  ModPage(Record record2) {
     record = record2;
   }
 
@@ -22,19 +21,27 @@ class ModPage extends StatefulWidget {
 }
 
 class AddPageSate extends State<ModPage> {
-  static TextEditingController titleText = TextEditingController(text: record.title);
-  static TextEditingController priceText = TextEditingController(text: record.price);
-  static TextEditingController desText = TextEditingController(text: record.description);
-  static TextEditingController bankText = TextEditingController(text: record.bank);
-  static TextEditingController accountText = TextEditingController(text: record.bankAccount);
-  static TextEditingController ownerText = TextEditingController(text: record.group);
-  static TextEditingController groupdesText = TextEditingController(text: record.groupDes);
-  static TextEditingController placeText = TextEditingController(text: record.place);
+  static TextEditingController titleText =
+      TextEditingController(text: record.title);
+  static TextEditingController priceText =
+      TextEditingController(text: record.price);
+  static TextEditingController desText =
+      TextEditingController(text: record.description);
+  static TextEditingController bankText =
+      TextEditingController(text: record.bank);
+  static TextEditingController accountText =
+      TextEditingController(text: record.bankAccount);
+  static TextEditingController ownerText =
+      TextEditingController(text: record.group);
+  static TextEditingController groupdesText =
+      TextEditingController(text: record.groupDes);
+  static TextEditingController placeText =
+      TextEditingController(text: record.place);
 
   final String uuid = Uuid().v1();
 
-  DateTime showDate;
-  DateTime showTime;
+  DateTime showDate = record.date;
+  DateTime showTime = record.time;
   Map<dynamic, dynamic> seats = record.seats;
 
   String datetime2date(DateTime date) {
@@ -48,11 +55,39 @@ class AddPageSate extends State<ModPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('공연정보 수정'),
-      ),
-      body: _buildBody(context)
-    );
+        appBar: AppBar(
+          title: Text('공연정보 수정'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                showCupertinoDialog(
+                  context: context,
+                  builder: (context) => CupertinoAlertDialog(
+                    title: Center(child: Text('공연삭제')),
+                    content: Center(child: Text('정말로 삭제하시겠습니까?')),
+                    actions: <Widget>[
+                      FlatButton(child: Text("삭제"),
+                        onPressed: (){
+                        record.reference.delete();
+                        Navigator.popUntil(
+                            context,
+                                (route) =>
+                            route.isFirst);
+                        },
+                      ),
+                      FlatButton(child: Text("취소"),
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },),
+                    ],
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+        body: _buildBody(context));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -88,101 +123,100 @@ class AddPageSate extends State<ModPage> {
                       children: <Widget>[
                         Container(
                             child: Container(
-                              child: Row(
-                                children: <Widget>[
-                                  FlatButton(
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.calendar_today,
-                                          color: Colors.blueGrey,
-                                          size: 13,
-                                        ),
-                                        showDate == null
-                                            ? Text(' 날짜등록')
-                                            : Text(datetime2date(showDate)),
-                                      ]),
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (BuildContext builder) {
-                                              return Container(
-                                                height: 150,
-                                                child: CupertinoDatePicker(
-                                                  use24hFormat: true,
-                                                  mode: CupertinoDatePickerMode
-                                                      .date,
-                                                  initialDateTime:
-                                                  DateTime.now(),
-                                                  onDateTimeChanged:
-                                                      (DateTime value) {
-                                                    setState(() {
-                                                      showDate = value;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            });
-                                      }),
-                                  FlatButton(
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.access_time,
-                                          color: Colors.blueGrey,
-                                          size: 13,
-                                        ),
-                                        showTime == null
-                                            ? Text(' 시간등록')
-                                            : Text(datetime2time(showTime)),
-                                      ]),
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (BuildContext builder) {
-                                              return Container(
-                                                height: 150,
-                                                child: CupertinoDatePicker(
-                                                  use24hFormat: true,
-                                                  mode: CupertinoDatePickerMode
-                                                      .time,
-                                                  initialDateTime:
-                                                  DateTime.now(),
-                                                  onDateTimeChanged:
-                                                      (DateTime value) {
-                                                    setState(() {
-                                                      showTime = value;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            });
-                                      }),
-                                  FlatButton(
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.event_seat,
-                                          color: Colors.blueGrey,
-                                          size: 13,
-                                        ),
-                                        seats == null
-                                            ? Text(' 좌석등록')
-                                            : Text(' 총 ' + (seats.length).toString() + '좌석')
-                                      ]),
-                                      onPressed: () async {
-                                        var returnSeat =
-                                        await Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                              fullscreenDialog: true,
-                                              builder: (context) => SeatPage()),
-                                        );
-                                        setState(() {
-                                          seats = returnSeat;
+                          child: Row(
+                            children: <Widget>[
+                              FlatButton(
+                                  child: Row(children: <Widget>[
+                                    Icon(
+                                      Icons.calendar_today,
+                                      color: Colors.blueGrey,
+                                      size: 13,
+                                    ),
+                                    showDate == null
+                                        ? Text(' 날짜등록')
+                                        : Text(datetime2date(showDate)),
+                                  ]),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext builder) {
+                                          return Container(
+                                            height: 150,
+                                            child: CupertinoDatePicker(
+                                              use24hFormat: true,
+                                              mode:
+                                                  CupertinoDatePickerMode.date,
+                                              initialDateTime: DateTime.now(),
+                                              onDateTimeChanged:
+                                                  (DateTime value) {
+                                                setState(() {
+                                                  showDate = value;
+                                                });
+                                              },
+                                            ),
+                                          );
                                         });
-                                        print(seats);
-                                      }),
-                                ],
-                              ),
-                            ))
+                                  }),
+                              FlatButton(
+                                  child: Row(children: <Widget>[
+                                    Icon(
+                                      Icons.access_time,
+                                      color: Colors.blueGrey,
+                                      size: 13,
+                                    ),
+                                    showTime == null
+                                        ? Text(' 시간등록')
+                                        : Text(datetime2time(showTime)),
+                                  ]),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext builder) {
+                                          return Container(
+                                            height: 150,
+                                            child: CupertinoDatePicker(
+                                              use24hFormat: true,
+                                              mode:
+                                                  CupertinoDatePickerMode.time,
+                                              initialDateTime: DateTime.now(),
+                                              onDateTimeChanged:
+                                                  (DateTime value) {
+                                                setState(() {
+                                                  showTime = value;
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        });
+                                  }),
+                              FlatButton(
+                                  child: Row(children: <Widget>[
+                                    Icon(
+                                      Icons.event_seat,
+                                      color: Colors.blueGrey,
+                                      size: 13,
+                                    ),
+                                    seats == null
+                                        ? Text(' 좌석등록')
+                                        : Text(' 총 ' +
+                                            (seats.length).toString() +
+                                            '좌석')
+                                  ]),
+                                  onPressed: () async {
+                                    var returnSeat = await Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          fullscreenDialog: true,
+                                          builder: (context) => SeatPage()),
+                                    );
+                                    setState(() {
+                                      seats = returnSeat;
+                                    });
+                                    print(seats);
+                                  }),
+                            ],
+                          ),
+                        ))
                       ],
                     ),
                   ),
@@ -207,8 +241,7 @@ class AddPageSate extends State<ModPage> {
                               focusColor: Color.fromRGBO(255, 178, 174, 10),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                    color:
-                                    Color.fromRGBO(255, 178, 174, 10),
+                                    color: Color.fromRGBO(255, 178, 174, 10),
                                     width: 2.0),
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
@@ -235,8 +268,7 @@ class AddPageSate extends State<ModPage> {
                               focusColor: Color.fromRGBO(255, 178, 174, 10),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
-                                    color:
-                                    Color.fromRGBO(255, 178, 174, 10),
+                                    color: Color.fromRGBO(255, 178, 174, 10),
                                     width: 2.0),
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
@@ -297,8 +329,7 @@ class AddPageSate extends State<ModPage> {
               borderSide: BorderSide(),
             ),
           ),
-          controller: map.value
-      ),
+          controller: map.value),
     );
   }
 
@@ -306,7 +337,7 @@ class AddPageSate extends State<ModPage> {
     final FirebaseUser userID = await FirebaseAuth.instance.currentUser();
     String uid = userID.uid;
     String imgURL = await uploadImage();
-    if (imgURL == null) imgURL =  record.imageURL;
+    if (imgURL == null) imgURL = record.imageURL;
     print(seats);
     record.reference.updateData({
       'title': titleText.text,
@@ -317,12 +348,12 @@ class AddPageSate extends State<ModPage> {
       'voteList': [],
       'group': ownerText.text,
       'uid': uid,
-      'imageURL' : imgURL,
+      'imageURL': imgURL,
       'bank': bankText.text,
       'bankAccount': accountText.text,
       'groupDescription': groupdesText.text,
       'place': placeText.text,
-      'seats' : seats
+      'seats': seats
     });
   }
 
@@ -366,9 +397,8 @@ class _ImageSectionState extends State<ImageSection> {
       children: <Widget>[
         Container(
           height: 250,
-          child: _image == null
-              ? Image.network(widget.url)
-              : Image.file(_image),
+          child:
+              _image == null ? Image.network(widget.url) : Image.file(_image),
         ),
         Divider(
           height: 5,
