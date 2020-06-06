@@ -15,6 +15,8 @@ class Record {
   final String group;
   final String groupDes;
   final String place;
+  final Map<dynamic, dynamic> reservation;
+  final Map<dynamic, dynamic> resConfirm;
 
   final DocumentReference reference;
 
@@ -33,7 +35,9 @@ class Record {
         group = map['group'],
         groupDes = map['groupDescription'],
         place = map['place'],
-        seats = map['seats'];
+        seats = map['seats'],
+        reservation = map['reservation'],
+        resConfirm = map['resConfirm'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
