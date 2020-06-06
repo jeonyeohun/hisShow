@@ -3,10 +3,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csee/record.dart';
 import 'package:csee/reservation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/painting.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 Record record;
 
@@ -32,6 +31,15 @@ class DetailPageSate extends State<DetailPage> {
         '분';
   }
 
+  int seatCount(Map seats) {
+    int ret = 0;
+    seats.forEach((key, value) {
+      if (value == false) ret++;
+    });
+
+    return ret;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,10 +62,17 @@ class DetailPageSate extends State<DetailPage> {
             initMap = ds['seats'];
           });
 
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ReservationPage(widget.docID, initMap)));
+          seatCount(initMap) > 0
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ReservationPage(widget.docID, initMap)))
+              : showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) =>
+                      CupertinoAlertDialog(content: Text("매진되었습니다!")),
+                );
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -78,10 +93,11 @@ class DetailPageSate extends State<DetailPage> {
   Widget _buildDetail(BuildContext context, DocumentSnapshot data) {
     if (!data.exists)
       return Scaffold(
-          body: Container(
-        alignment: Alignment.center,
-        child: Text('존재하지 않는 공연입니다'),
-      ));
+        body: Container(
+          alignment: Alignment.center,
+          child: Text('존재하지 않는 공연입니다'),
+        ),
+      );
     record = Record.fromSnapshot(data);
     return ListView(
       children: <Widget>[
