@@ -329,6 +329,8 @@ class AddPageSate extends State<AddPage> {
       'bankAccount': accountText.text,
       'groupDescription':groupdesText.text,
       'place' : placeText.text,
+      'reservation' : {},
+      'resConfirm' : {},
     });
   }
 
