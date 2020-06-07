@@ -27,7 +27,6 @@ class ReservationPage extends StatefulWidget {
 class ReservationPageState extends State<ReservationPage> {
   static List<String> selectedSeats = [];
   List<List<int>> seatsInfo;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -163,7 +162,9 @@ class ReservationPageState extends State<ReservationPage> {
                                         child: Column(
                                           children: <Widget>[
                                             Text('아래 계좌로 관람료 ' +
-                                                (int.parse(record.price) * selectedSeats.length).toString() +
+                                                (int.parse(record.price) *
+                                                        selectedSeats.length)
+                                                    .toString() +
                                                 '원을 입금해주세요. \n탭 하면 계좌 정보가 클립보드로 복사됩니다!'),
                                             SizedBox(
                                               height: 20,
@@ -303,7 +304,9 @@ class ReservationPageState extends State<ReservationPage> {
       ('reservation' + "." + UserInfoRecord.currentUser.uid):
           FieldValue.arrayUnion(selectedSeats)
     });
-    await record.reference.updateData({'resConfirm' : {UserInfoRecord.currentUser.uid : false}});
+    await record.reference.updateData({
+      'resConfirm' + "." + UserInfoRecord.currentUser.uid: false
+    });
     await record.reference.updateData({'seats': updatingSeat});
   }
 }
