@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csee/userInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,7 +53,18 @@ class _AnonymouslySignInSectionState extends State<_AnonymouslySignInSection> {
               buttonColor: Colors.grey,
               child: RaisedButton(
                 onPressed: () async {
-                  _signInAnonymously();
+                  await _signInAnonymously();
+                  final QuerySnapshot result = await Firestore.instance.collection('UserInfo').getDocuments();
+                  final List<DocumentSnapshot> documents = result.documents;
+                  List<String> ll = [];
+                  documents.forEach((element) {
+                    ll.add(element.documentID);
+                  });
+                  print(ll);
+                  if(!ll.contains(UserInfoRecord.currentUser.uid)) {
+                    Navigator.popAndPushNamed(context, '/userinfo');
+                  }
+                  else Navigator.pop(context);
                 },
                 child: const Text('GUEST', style: TextStyle(color: Colors.white)),
               ),
@@ -88,7 +100,6 @@ class _AnonymouslySignInSectionState extends State<_AnonymouslySignInSection> {
         _success = true;
         _userID = user.uid;
         UserInfoRecord.currentUser = user;
-        Navigator.pop(context);
       } else {
         _success = false;
       }
@@ -116,7 +127,18 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
             buttonColor: Colors.redAccent,
             child:RaisedButton(
               onPressed: () async {
-                _signInWithGoogle();
+                await _signInWithGoogle();
+                final QuerySnapshot result = await Firestore.instance.collection('UserInfo').getDocuments();
+                final List<DocumentSnapshot> documents = result.documents;
+                List<String> ll = [];
+                documents.forEach((element) {
+                  ll.add(element.documentID);
+                });
+                print(ll);
+                if(!ll.contains(UserInfoRecord.currentUser.uid)) {
+                  Navigator.popAndPushNamed(context, '/userinfo');
+                }
+                else Navigator.pop(context);
               },
               child: const Text('GOOGLE', style: TextStyle(color: Colors.white)),
             ),
@@ -144,12 +166,11 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
 
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
-    setState(() {
+    setState(()  {
       if (user != null) {
         _success = true;
         _userID = user.uid;
         UserInfoRecord.currentUser = user;
-        Navigator.pop(context);
       } else {
         _success = false;
       }
