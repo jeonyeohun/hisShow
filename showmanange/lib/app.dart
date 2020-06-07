@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:csee/seat.dart';
+import 'package:csee/userInfo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -33,9 +35,10 @@ class Start extends StatelessWidget {
       initialRoute: '/login',
 
       routes: {
-        '/details' : (context) => DetailPage(),
         '/mypage' : (context) => MyPage(),
         '/addpage' : (context) => AddPage(),
+        '/seatpage' : (context) => SeatPage(),
+        '/userinfo' : (context) => UserInfoPage(),
       },
       onGenerateRoute: _getRoute,
     );
