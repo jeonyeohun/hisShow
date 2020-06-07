@@ -152,7 +152,6 @@ class _SeatPageState extends State<SeatPage> {
                         builder: (context) => SeatDetail(chairs),
                       ),
                     );
-
                     setState(() {
                       chairs = returnSeat;
                     });
@@ -250,7 +249,6 @@ class SeatDetailState extends State<SeatDetail> {
                   borderRadius: BorderRadius.circular(30)),
               onPressed: () {
                 Navigator.of(context).pop(widget.seatsInfo);
-                dispose();
               },
             ),
           ],
