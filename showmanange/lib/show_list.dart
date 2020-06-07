@@ -38,7 +38,10 @@ class ShowListState extends State<ShowList> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection('Shows').where('date', isGreaterThanOrEqualTo: DateTime.now()).snapshots(),
+        stream: Firestore.instance
+            .collection('Shows')
+            .where('date', isGreaterThanOrEqualTo: DateTime.now())
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Scaffold();
           return _buildList(context, snapshot.data.documents);
@@ -64,12 +67,28 @@ class ShowListState extends State<ShowList> {
     );
   }
 
+  int seatCount(Map seats) {
+    int ret = 0;
+    seats.forEach((key, value) {
+      if (value == false) ret++;
+    });
+
+    return ret;
+  }
+
   Widget _buildItems(BuildContext context, DocumentSnapshot data) {
     final record = Record.fromSnapshot(data);
     return Container(
       margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-      height: 100,
+      height: 150,
       decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(
+            record.imageURL,
+          ),
+          fit: BoxFit.fitWidth,
+          colorFilter: ColorFilter.mode(Colors.white30, BlendMode.lighten),
+        ),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
@@ -84,48 +103,75 @@ class ShowListState extends State<ShowList> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+        color: Colors.white30,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            CircleAvatar(
-              radius: 35,
-              backgroundImage: NetworkImage(record.imageURL),
+            SizedBox(
+              width: 10,
             ),
-            SizedBox(width: 10,),
             Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  AutoSizeText(
-                    record.group,
-                  ),
-                  AutoSizeText(
-                    record.title.toUpperCase(),
-                    minFontSize: 16,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  AutoSizeText(
-                    record.date.month.toString()+ '월' + ' ' + record.date.day.toString() + '일',
-                    maxFontSize: 13,
-                  ),
-                  AutoSizeText(
-                    timeParse(record.time),
-                    maxFontSize: 12,
-                  ),
-                ],
+              child:
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    AutoSizeText(
+                      record.group,
+                    ),
+                    AutoSizeText(
+                      record.title.toUpperCase(),
+                      minFontSize: 25,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    AutoSizeText(
+                      record.date.month.toString() +
+                          '월' +
+                          ' ' +
+                          record.date.day.toString() +
+                          '일',
+                      maxFontSize: 20,
+                    ),
+                    AutoSizeText(
+                      timeParse(record.time),
+                      maxFontSize: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
-            Divider(color: Colors.redAccent,),
-            FlatButton(
-              child: Text('예약하기'),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        DetailPage(record.reference.documentID)));
-              },
+            Container(
+              color: Colors.transparent,
+              height: 50,
+              child: RaisedButton(
+                color: Color.fromRGBO(255, 255, 255, 130),
+                child: Center(
+                  child: seatCount(record.seats) > 0
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '잔여좌석: ' + seatCount(record.seats).toString(),
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            Text(
+                              '예약하기',
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                            ),
+                          ],
+                        )
+                      : Text('매진!',
+                          style: TextStyle(fontWeight: FontWeight.w800)),
+                ),
+                onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              DetailPage(record.reference.documentID)));
+                },
+              ),
             ),
           ],
         ),
