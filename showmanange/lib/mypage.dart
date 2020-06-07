@@ -13,11 +13,10 @@ class MyPage extends StatefulWidget {
 class MyPageState extends State<MyPage> {
   String timeParse(DateTime dt) {
     String ret = '';
-    if (dt.hour.toInt() > 12) {
+    if (dt.hour.toInt() > 12)
       ret += '오후 ';
-    } else {
+    else
       ret += '오전 ';
-    }
 
     return ret +
         (dt.hour.toInt() % 12).toString() +
@@ -106,11 +105,9 @@ class MyPageState extends State<MyPage> {
                 children: <Widget>[
                   AutoSizeText(
                     record.title.toUpperCase(),
-                    minFontSize:20,
+                    minFontSize: 20,
                     softWrap: true,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w800),
                   ),
                   Row(
                     children: <Widget>[
@@ -127,47 +124,199 @@ class MyPageState extends State<MyPage> {
                     ],
                   ),
                   Flexible(
-                      child: ButtonBar(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          SizedBox(
-                            width: 5,
-                          ),
-                          RaisedButton(
-                            padding: EdgeInsets.all(5),
-                            color: Colors.redAccent,
-                            textColor: Colors.white,
-                            child: AutoSizeText("예약자 관리"),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            onPressed: () {},
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          RaisedButton(
-                            padding: EdgeInsets.all(5),
-                            color: Colors.redAccent,
-                            textColor: Colors.white,
-                            child: AutoSizeText("정보 수정"),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ModPage(record)));
-                            },
-                          ),
-                        ],
-                      )
-                    ],
-                  ))
+                    child: ButtonBar(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 5,
+                            ),
+                            RaisedButton(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.redAccent,
+                              textColor: Colors.white,
+                              child: AutoSizeText("예약자 관리"),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                              onPressed: () async {
+                                CollectionReference documents = Firestore
+                                    .instance
+                                    .collection('UserInfo')
+                                    .reference();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReservationList(
+                                            record, documents)));
+                              },
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            RaisedButton(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.redAccent,
+                              textColor: Colors.white,
+                              child: AutoSizeText("정보 수정"),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ModPage(record)));
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ReservationList extends StatefulWidget {
+  final Record record;
+  final CollectionReference documents;
+  @override
+  ReservationList(this.record, this.documents);
+  State<StatefulWidget> createState() {
+    return ReservationListState();
+  }
+}
+
+Future<List> getInfo(CollectionReference documents, String uid) async {
+  String name =
+      await documents.document(uid).get().then((value) => value.data['name']);
+  String num = await documents
+      .document(uid)
+      .get()
+      .then((value) => value.data['phoneNum']);
+
+  return [name, num];
+}
+
+class ReservationListState extends State<ReservationList> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("예약자 관리"),
+      ),
+      body: ListView(
+        children: widget.record.reservation.keys
+            .toList()
+            .map<Widget>(
+              (uid) => Container(
+                padding: EdgeInsets.all(10),
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(3, 3),
+                        color: Color.fromARGB(80, 0, 0, 0),
+                        blurRadius: 20),
+                    BoxShadow(
+                        offset: Offset(-2, -2),
+                        color: Color.fromARGB(150, 255, 255, 255),
+                        blurRadius: 30)
+                  ],
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                margin: EdgeInsets.all(10),
+                child: FutureBuilder(
+                  future: getInfo(widget.documents, uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData == false) {
+                      return CupertinoActivityIndicator();
+                    } else {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(snapshot.data[0]),
+                                Text(snapshot.data[1]),
+                              ],
+                            ),
+                          ),
+                          Center(
+                            child:
+                                Text(widget.record.reservation[uid].toString()),
+                          ),
+                          RaisedButton(
+                            child: widget.record.resConfirm[uid] == true
+                                ? Text('승인완료')
+                                : Text('승인대기'),
+                            onPressed: () async {
+                              showCupertinoDialog(
+                                context: context,
+                                builder: (context) => CupertinoAlertDialog(
+                                  title: widget.record.resConfirm[uid]
+                                      ? Text("정말로 취소할까요?")
+                                      : Text("입금여부를 확인하셨나요?"),
+                                  content: widget.record.resConfirm[uid]
+                                      ? Text("확인을 누르시면 예약이 취소됩니다.")
+                                      : Text("확인을 누르시면 예약이 확정됩니다."),
+                                  actions: <Widget>[
+                                    RaisedButton(
+                                      child: Text("확인"),
+                                      onPressed: () async {
+                                        if (widget.record.resConfirm[uid]) {
+                                          await widget.record.reference
+                                              .updateData({
+                                            'resConfirm' + "." + uid: false
+                                          });
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            widget.record.resConfirm[uid] =
+                                                false;
+                                          });
+                                        } else {
+                                          await widget.record.reference
+                                              .updateData({
+                                            'resConfirm' + "." + uid: true
+                                          });
+                                          Navigator.pop(context);
+                                          setState(() {
+                                            widget.record.resConfirm[uid] =
+                                                true;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    RaisedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('취소'),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
