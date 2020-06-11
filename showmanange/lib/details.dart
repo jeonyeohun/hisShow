@@ -133,29 +133,6 @@ class DetailPageSate extends State<DetailPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 20,
-              ),
-              Container(
-                  decoration: BoxDecoration(),
-                  child: Column(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.redAccent,
-                        child: Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      AutoSizeText(
-                        '보고싶어요!',
-                        maxFontSize: 12,
-                      )
-                    ],
-                  )),
             ],
           ),
         ),
