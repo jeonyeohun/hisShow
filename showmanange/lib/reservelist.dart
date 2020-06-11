@@ -45,6 +45,7 @@ class ReserveListPageState extends State<ReserveListPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(214, 221, 232, 100),
       body: StreamBuilder<QuerySnapshot>(
@@ -63,8 +64,7 @@ class ReserveListPageState extends State<ReserveListPage> {
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     if (snapshot.isEmpty)
       return Scaffold(
-        body: Container(
-          alignment: Alignment.center,
+        body: Center(
           child: Text('등록한 공연이 없습니다.'),
         ),
       );
@@ -75,8 +75,6 @@ class ReserveListPageState extends State<ReserveListPage> {
           bool flag = false;
           Map rev = data.data['reservation'];
           rev.forEach((key, value) {
-            print(key);
-            print(value);
             if (key.compareTo(UserInfoRecord.currentUser.uid) == 0) {
               flag = true;
             }
@@ -156,35 +154,97 @@ class ReserveListPageState extends State<ReserveListPage> {
             Flexible(
               child: ButtonBar(
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      RaisedButton(
-                        padding: EdgeInsets.all(5),
-                        color: Colors.redAccent,
-                        textColor: Colors.white,
-                        child: Text(
-                          "공연정보",
-                          style: TextStyle(fontSize: 13),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 45,
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(5),
+                            color: Colors.redAccent,
+                            textColor: Colors.white,
+                            child: Text(
+                              "공연\n정보",
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailPage(record.reference.documentID)));
+                            },
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailPage(record.reference.documentID)));
-                        },
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        child: record.resConfirm[UserInfoRecord.currentUser.uid]
-                            ? _showTicketButton(record)
-                            : _showUnconfirmedButton(record),
-                      )
-                    ],
+                        SizedBox(
+                          width: 5,
+                        ),
+                        SizedBox(
+                          width: 50,
+                          child: Container(
+                            child: record.resConfirm[UserInfoRecord.currentUser.uid]
+                                ? _showTicketButton(record)
+                                : _showUnconfirmedButton(record),
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        SizedBox(width: 50,
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(5),
+                          color: Colors.redAccent,
+                          textColor: Colors.white,
+                          child: Text(
+                            "예약\n취소",
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          onPressed: ()  {
+                            showCupertinoDialog(context: context, builder: (context)=>
+                              CupertinoAlertDialog(
+                                title: Text('예약 취소'),
+                                content: Center(child: Text('정말로 취소하시겠습니까?')),
+                                actions: <Widget>[
+                                  RaisedButton(
+                                    child: Text(
+                                      '확인'
+                                    ),
+                                    onPressed: () async{
+                                      record.resConfirm.remove(UserInfoRecord.currentUser.uid);
+                                      List list = record.reservation[UserInfoRecord.currentUser.uid];
+                                      list.forEach((element) {
+                                        record.seats[element] = false;
+                                      });
+                                      record.reservation.remove(UserInfoRecord.currentUser.uid);
+
+                                      await Firestore.instance.collection('Shows').document(record.reference.documentID).updateData(
+                                          {
+                                            'seats' : record.seats,
+                                            'reservation' : record.reservation,
+                                            'resconfirm' : record.resConfirm
+                                          }
+                                      );
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  RaisedButton(
+                                    child: Text(
+                                        '취소'
+                                    ),
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -202,7 +262,7 @@ class ReserveListPageState extends State<ReserveListPage> {
       textColor: Colors.white,
       child: Text(
         "티켓보기",
-        style: TextStyle(fontSize: 13),
+        style: TextStyle(fontSize: 10),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       onPressed: () {
@@ -245,15 +305,15 @@ class ReserveListPageState extends State<ReserveListPage> {
       },
     );
   }
-
   Widget _showUnconfirmedButton(Record record) {
     return RaisedButton(
       padding: EdgeInsets.all(5),
       color: Colors.redAccent,
       textColor: Colors.white,
       child: Text(
-        "승인 대기중",
-        style: TextStyle(fontSize: 13),
+        "승인\n대기중",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 10),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       onPressed: () {
