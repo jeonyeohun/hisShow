@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csee/record.dart';
 import 'package:csee/seat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -199,7 +198,7 @@ class AddPageSate extends State<ModPage> {
                                     seats == null
                                         ? Text(' 좌석등록')
                                         : Text(' 총 ' +
-                                            (seats.length).toString() +
+                                            (seats.length-2).toString() +
                                             '좌석')
                                   ]),
                                   onPressed: () async {
@@ -212,7 +211,6 @@ class AddPageSate extends State<ModPage> {
                                     setState(() {
                                       seats = returnSeat;
                                     });
-                                    print(seats);
                                   }),
                             ],
                           ),
@@ -338,7 +336,6 @@ class AddPageSate extends State<ModPage> {
     String uid = userID.uid;
     String imgURL = await uploadImage();
     if (imgURL == null) imgURL = record.imageURL;
-    print(seats);
     record.reference.updateData({
       'title': titleText.text,
       'description': desText.text,
