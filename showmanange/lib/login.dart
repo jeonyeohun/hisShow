@@ -60,13 +60,12 @@ class _AnonymouslySignInSectionState extends State<_AnonymouslySignInSection> {
                   documents.forEach((element) {
                     ll.add(element.documentID);
                   });
-                  print(ll);
                   if(!ll.contains(UserInfoRecord.currentUser.uid)) {
                     Navigator.popAndPushNamed(context, '/userinfo');
                   }
                   else Navigator.pop(context);
                 },
-                child: const Text('GUEST', style: TextStyle(color: Colors.white)),
+                child: const Text('게스트 로그인', style: TextStyle(color: Colors.white)),
               ),
             )),
       ],
@@ -134,13 +133,12 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
                 documents.forEach((element) {
                   ll.add(element.documentID);
                 });
-                print(ll);
                 if(!ll.contains(UserInfoRecord.currentUser.uid)) {
                   Navigator.popAndPushNamed(context, '/userinfo');
                 }
                 else Navigator.pop(context);
               },
-              child: const Text('GOOGLE', style: TextStyle(color: Colors.white)),
+              child: const Text('구글로 로그인하기', style: TextStyle(color: Colors.white)),
             ),
           ),
         ),
