@@ -45,10 +45,6 @@ class MyPageState extends State<MyPage> {
         });
   }
 
-  bool isDataEmpty(DocumentSnapshot data) {
-    return data.exists;
-  }
-
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     if (snapshot.isEmpty)
       return Scaffold(
@@ -257,57 +253,115 @@ class ReservationListState extends State<ReservationList> {
                             child:
                                 Text(widget.record.reservation[uid].toString()),
                           ),
-                          RaisedButton(
-                            child: widget.record.resConfirm[uid] == true
-                                ? Text('승인완료')
-                                : Text('승인대기'),
-                            onPressed: () async {
-                              showCupertinoDialog(
-                                context: context,
-                                builder: (context) => CupertinoAlertDialog(
-                                  title: widget.record.resConfirm[uid]
-                                      ? Text("정말로 취소할까요?")
-                                      : Text("입금여부를 확인하셨나요?"),
-                                  content: widget.record.resConfirm[uid]
-                                      ? Text("확인을 누르시면 예약이 취소됩니다.")
-                                      : Text("확인을 누르시면 예약이 확정됩니다."),
-                                  actions: <Widget>[
-                                    RaisedButton(
-                                      child: Text("확인"),
-                                      onPressed: () async {
-                                        if (widget.record.resConfirm[uid]) {
-                                          await widget.record.reference
-                                              .updateData({
-                                            'resConfirm' + "." + uid: false
-                                          });
-                                          Navigator.pop(context);
-                                          setState(() {
-                                            widget.record.resConfirm[uid] =
-                                                false;
-                                          });
-                                        } else {
-                                          await widget.record.reference
-                                              .updateData({
-                                            'resConfirm' + "." + uid: true
-                                          });
-                                          Navigator.pop(context);
-                                          setState(() {
-                                            widget.record.resConfirm[uid] =
-                                                true;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    RaisedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('취소'),
-                                    )
-                                  ],
+                          Container(
+                            child:  Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 60,
+                                  child: RaisedButton(
+                                    child: widget.record.resConfirm[uid] == true
+                                        ? Text('승인완료')
+                                        : Text('승인대기'),
+                                    onPressed: () async {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) => CupertinoAlertDialog(
+                                          title: widget.record.resConfirm[uid]
+                                              ? Text("정말로 취소할까요?")
+                                              : Text("입금여부를 확인하셨나요?"),
+                                          content: widget.record.resConfirm[uid]
+                                              ? Text("확인을 누르시면 예약이 취소됩니다.")
+                                              : Text("확인을 누르시면 예약이 확정됩니다."),
+                                          actions: <Widget>[
+                                            RaisedButton(
+                                              child: Text("확인"),
+                                              onPressed: () async {
+                                                if (widget.record.resConfirm[uid]) {
+                                                  await widget.record.reference
+                                                      .updateData({
+                                                    'resConfirm' + "." + uid: false
+                                                  });
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    widget.record.resConfirm[uid] =
+                                                    false;
+                                                  });
+                                                } else {
+                                                  await widget.record.reference
+                                                      .updateData({
+                                                    'resConfirm' + "." + uid: true
+                                                  });
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    widget.record.resConfirm[uid] =
+                                                    true;
+                                                  });
+                                                }
+                                              },
+                                            ),
+                                            RaisedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('취소', textAlign: TextAlign.center,),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              );
-                            },
+                                SizedBox(width: 5,),
+                                SizedBox(
+                                  width: 60,
+                                  child: RaisedButton(
+                                    child: Text("예약 취소", textAlign: TextAlign.center,),
+                                    onPressed: (){
+                                      showCupertinoDialog(context: context, builder: (context)=>
+                                          CupertinoAlertDialog(
+                                            title: Text('예약 취소'),
+                                            content: Center(child: Text('정말로 취소하시겠습니까?')),
+                                            actions: <Widget>[
+                                              RaisedButton(
+                                                child: Text(
+                                                    '확인'
+                                                ),
+                                                onPressed: () async{
+                                                  widget.record.resConfirm.remove(UserInfoRecord.currentUser.uid);
+                                                  List list = widget.record.reservation[UserInfoRecord.currentUser.uid];
+                                                  list.forEach((element) {
+                                                    widget.record.seats[element] = false;
+                                                  });
+                                                  widget.record.reservation.remove(UserInfoRecord.currentUser.uid);
+
+                                                  await Firestore.instance.collection('Shows').document(widget.record.reference.documentID).updateData(
+                                                      {
+                                                        'seats' : widget.record.seats,
+                                                        'reservation' : widget.record.reservation,
+                                                        'resconfirm' : widget.record.resConfirm
+                                                      }
+                                                  );
+                                                  setState(() {});
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              RaisedButton(
+                                                child: Text(
+                                                    '취소'
+                                                ),
+                                                onPressed: (){
+                                                  Navigator.pop(context);
+
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
                           )
                         ],
                       );
