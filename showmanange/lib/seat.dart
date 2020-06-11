@@ -1,4 +1,3 @@
-import 'package:csee/add.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -107,8 +106,7 @@ class _SeatPageState extends State<SeatPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
                   onPressed: () {
-                    setState(() {
-                    });
+                    setState(() {});
                     if (chairs.isEmpty) {
                       chairs = List<List<dynamic>>.generate(
                           chairsRow.toInt(),
@@ -119,16 +117,12 @@ class _SeatPageState extends State<SeatPage> {
                     Map<String, dynamic> result = new Map<String, dynamic>();
                     for (int i = 0; i < chairs.length; i++) {
                       for (int j = 0; j < chairs[0].length; j++) {
-                        print(i.toString() + ' ' + j.toString());
                         result[String.fromCharCode(65 + i) +
                             (j + 1).toString()] = chairs[i][j];
                       }
                     }
                     result['row'] = chairsRow.toInt();
                     result['col'] = chairsCol.toInt();
-
-                    print(result);
-
 
                     Navigator.of(context).pop(result);
                   },
@@ -285,14 +279,11 @@ class SeatDetailState extends State<SeatDetail> {
         ),
         onTap: () {
           setState(() {
-            print(widget.seatsInfo.length);
-            print(widget.seatsInfo[0].length);
             if (widget.seatsInfo[row][col]) {
               widget.seatsInfo[row][col] = false;
             } else {
               widget.seatsInfo[row][col] = true;
             }
-            print(widget.seatsInfo);
           });
         },
       ),
