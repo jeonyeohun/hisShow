@@ -120,6 +120,18 @@ class UserInfoModPageState extends State<UserInfoModPage> {
                           },
                         ),
                       ),
+                      Center(
+                        child: RaisedButton(
+                          child: Text('로그아웃'),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                          ),
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.pushNamed(context, '/login');
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
