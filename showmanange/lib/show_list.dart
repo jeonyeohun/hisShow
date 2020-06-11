@@ -1,12 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:neumorphic/neumorphic.dart';
-
 import 'details.dart';
 import 'record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class ShowList extends StatefulWidget {
   State<ShowList> createState() => ShowListState();
@@ -87,7 +84,7 @@ class ShowListState extends State<ShowList> {
             record.imageURL,
           ),
           fit: BoxFit.fitWidth,
-          colorFilter: ColorFilter.mode(Colors.white30, BlendMode.lighten),
+          colorFilter: ColorFilter.mode(Colors.white12, BlendMode.lighten),
         ),
         color: Colors.white,
         boxShadow: [
@@ -113,8 +110,7 @@ class ShowListState extends State<ShowList> {
               width: 10,
             ),
             Flexible(
-              child:
-              Container(
+              child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -134,10 +130,12 @@ class ShowListState extends State<ShowList> {
                           record.date.day.toString() +
                           '일',
                       maxFontSize: 20,
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     AutoSizeText(
                       timeParse(record.time),
                       maxFontSize: 15,
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -167,9 +165,9 @@ class ShowListState extends State<ShowList> {
                           style: TextStyle(fontWeight: FontWeight.w800)),
                 ),
                 onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              DetailPage(record.reference.documentID)));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          DetailPage(record.reference.documentID)));
                 },
               ),
             ),
