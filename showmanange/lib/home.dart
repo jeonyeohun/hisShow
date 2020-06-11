@@ -14,7 +14,7 @@
 
 import 'package:csee/reservelist.dart';
 import 'package:csee/userInfo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:csee/userinfomod.dart';
 import 'package:flutter/material.dart';
 import 'show_list.dart';
 import 'mypage.dart';
@@ -32,10 +32,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final page_title = ['공연목록', '예약확인', '내 공연 관리', ];
+    final pageTitle = [
+      '공연목록',
+      '예약한 공연',
+      '내 공연 관리',
+      '내 정보'
+    ];
 
     Widget child;
     switch (_currentIndex) {
@@ -46,22 +50,31 @@ class _HomePageState extends State<HomePage> {
         child = ReserveListPage();
         break;
       case 2:
-        print(UserInfoRecord.currentUser.uid);
         child = MyPage();
+        break;
+      case 3:
+        child = UserInfoModPage();
         break;
 
     }
     return Scaffold(
       appBar: AppBar(
-          title: Text(page_title[_currentIndex]),
+          title: Text(pageTitle[_currentIndex]),
+          elevation: 0,
           actions: _currentIndex == 2
               ? <Widget>[
-                  FlatButton(
-                    child: Text('새공연 등록'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/addpage');
-                    },
-                  )
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: FlatButton(
+                        child: Text('새 공연 등록'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/addpage');
+                        },
+                      ),
+                    ),
+
                 ]
               : null),
       body: child,
@@ -77,13 +90,16 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            title: Text('예약확인'),
+            title: Text('예약한 공연'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.audiotrack),
-            title: Text('내 공연 관리'),
+            title: Text('등록한 공연'),
           ),
-
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            title: Text('내 정보'),
+          ),
         ],
       ),
     );
