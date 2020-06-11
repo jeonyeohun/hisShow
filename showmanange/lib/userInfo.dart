@@ -23,6 +23,13 @@ class UserInfoPageState extends State<UserInfoPage> {
   String numValid = '';
 
   @override
+  void initState() {
+    super.initState();
+    name.clear();
+    phoneNum.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
