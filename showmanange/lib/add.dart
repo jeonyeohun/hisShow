@@ -166,7 +166,7 @@ class AddPageSate extends State<AddPage> {
                                         ),
                                         seats == null
                                             ? Text(' 좌석등록')
-                                            : Text(' 총 ' + (seats.length).toString() + '좌석')
+                                            : Text(' 총 ' + (seats.length-2).toString() + '좌석')
                                       ]),
                                       onPressed: () async {
                                         var returnSeat =
@@ -176,7 +176,6 @@ class AddPageSate extends State<AddPage> {
                                               fullscreenDialog: true,
                                               builder: (context) => SeatPage()),
                                         );
-                                        print(returnSeat);
                                         setState(() {
                                           seats = returnSeat;
                                         });
