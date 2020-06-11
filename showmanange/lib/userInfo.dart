@@ -25,7 +25,18 @@ class UserInfoPageState extends State<UserInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left),
+          onPressed: (){
+            Navigator.popAndPushNamed(context, '/login');
+            },
+        ),
+      ),
+      body:
+      Container(
         padding: EdgeInsets.all(15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
