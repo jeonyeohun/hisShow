@@ -35,6 +35,7 @@ class Start extends StatelessWidget {
       initialRoute: '/login',
 
       routes: {
+        '/home' : (context) => HomePage(),
         '/mypage' : (context) => MyPage(),
         '/addpage' : (context) => AddPage(),
         '/seatpage' : (context) => SeatPage(),
