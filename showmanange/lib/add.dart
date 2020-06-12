@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csee/seat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,15 +40,14 @@ class AddPageSate extends State<AddPage> {
   Map<String, TextEditingController> field = {
     '공연 이름': titleText,
     '단체 이름': ownerText,
-    '단체 소개' : groupdesText,
+    '단체 소개': groupdesText,
     '공연 설명': desText,
     '가격': priceText,
-    '공연 장소' : placeText,
+    '공연 장소': placeText,
   };
 
   @override
   void initState() {
-
     titleText.clear();
     desText.clear();
     ownerText.clear();
@@ -87,102 +87,117 @@ class AddPageSate extends State<AddPage> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Container(
-                                child: Container(
-                              child: Row(
-                                children: <Widget>[
-                                  FlatButton(
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.calendar_today,
-                                          color: Colors.blueGrey,
-                                          size: 13,
-                                        ),
-                                        showDate == null
-                                            ? Text(' 날짜등록')
-                                            : Text(datetime2date(showDate)),
-                                      ]),
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (BuildContext builder) {
-                                              return Container(
-                                                height: 150,
-                                                child: CupertinoDatePicker(
-                                                  use24hFormat: true,
-                                                  mode: CupertinoDatePickerMode
-                                                      .date,
-                                                  initialDateTime:
-                                                      DateTime.now(),
-                                                  onDateTimeChanged:
-                                                      (DateTime value) {
-                                                    setState(() {
-                                                      showDate = value;
-                                                    });
-                                                  },
-                                                ),
-                                              );
+                            Flex(
+                              direction: Axis.horizontal,
+                              children: <Widget>[
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      FlatButton(
+                                          child: Row(children: <Widget>[
+                                            Icon(
+                                              Icons.calendar_today,
+                                              color: Colors.blueGrey,
+                                              size: 13,
+                                            ),
+                                            showDate == null
+                                                ? Text(' 날짜등록')
+                                                : Text(datetime2date(showDate)),
+                                          ]),
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext builder) {
+                                                  return Container(
+                                                    height: 150,
+                                                    child: CupertinoDatePicker(
+                                                      use24hFormat: true,
+                                                      mode:
+                                                          CupertinoDatePickerMode
+                                                              .date,
+                                                      initialDateTime:
+                                                          DateTime.now(),
+                                                      onDateTimeChanged:
+                                                          (DateTime value) {
+                                                        setState(() {
+                                                          showDate = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  );
+                                                });
+                                          }),
+                                      FlatButton(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.access_time,
+                                                color: Colors.blueGrey,
+                                                size: 13,
+                                              ),
+                                              showTime == null
+                                                  ? Text(' 시간등록')
+                                                  : Text(
+                                                      datetime2time(showTime)),
+                                            ],
+                                          ),
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext builder) {
+                                                  return Container(
+                                                    height: 150,
+                                                    child: CupertinoDatePicker(
+                                                      use24hFormat: true,
+                                                      mode:
+                                                          CupertinoDatePickerMode
+                                                              .time,
+                                                      initialDateTime:
+                                                          DateTime.now(),
+                                                      onDateTimeChanged:
+                                                          (DateTime value) {
+                                                        setState(() {
+                                                          showTime = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  );
+                                                });
+                                          }),
+                                      FlatButton(
+                                          child: Row(children: <Widget>[
+                                            Icon(
+                                              Icons.event_seat,
+                                              color: Colors.blueGrey,
+                                              size: 13,
+                                            ),
+                                            seats == null
+                                                ? Text(' 좌석등록')
+                                                : AutoSizeText(' 총 ' +
+                                                    (seats.length - 2)
+                                                        .toString() +
+                                                    '좌석')
+                                          ]),
+                                          onPressed: () async {
+                                            var returnSeat =
+                                                await Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                  fullscreenDialog: true,
+                                                  builder: (context) =>
+                                                      SeatPage()),
+                                            );
+                                            setState(() {
+                                              seats = returnSeat;
                                             });
-                                      }),
-                                  FlatButton(
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.access_time,
-                                          color: Colors.blueGrey,
-                                          size: 13,
-                                        ),
-                                        showTime == null
-                                            ? Text(' 시간등록')
-                                            : Text(datetime2time(showTime)),
-                                      ]),
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (BuildContext builder) {
-                                              return Container(
-                                                height: 150,
-                                                child: CupertinoDatePicker(
-                                                  use24hFormat: true,
-                                                  mode: CupertinoDatePickerMode
-                                                      .time,
-                                                  initialDateTime:
-                                                      DateTime.now(),
-                                                  onDateTimeChanged:
-                                                      (DateTime value) {
-                                                    setState(() {
-                                                      showTime = value;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            });
-                                      }),
-                                  FlatButton(
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.event_seat,
-                                          color: Colors.blueGrey,
-                                          size: 13,
-                                        ),
-                                        seats == null
-                                            ? Text(' 좌석등록')
-                                            : Text(' 총 ' + (seats.length-2).toString() + '좌석')
-                                      ]),
-                                      onPressed: () async {
-                                        var returnSeat =
-                                            await Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                              fullscreenDialog: true,
-                                              builder: (context) => SeatPage()),
-                                        );
-                                        setState(() {
-                                          seats = returnSeat;
-                                        });
-                                      }),
-                                ],
-                              ),
-                            ))
+                                          }),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -272,7 +287,6 @@ class AddPageSate extends State<AddPage> {
                                           title: Text('사진을 등록해주세요!')))
                               : createItem();
                           Navigator.of(context).pop();
-
                         },
                       ),
                     ],
@@ -321,15 +335,15 @@ class AddPageSate extends State<AddPage> {
       'price': priceText.text,
       'voteList': [],
       'imageURL': imgURL,
-      'group' : ownerText.text,
-      'uid' : uid,
+      'group': ownerText.text,
+      'uid': uid,
       'seats': seats,
-      'bank' : bankText.text,
+      'bank': bankText.text,
       'bankAccount': accountText.text,
-      'groupDescription':groupdesText.text,
-      'place' : placeText.text,
-      'reservation' : {},
-      'resConfirm' : {},
+      'groupDescription': groupdesText.text,
+      'place': placeText.text,
+      'reservation': {},
+      'resConfirm': {},
     });
   }
 
