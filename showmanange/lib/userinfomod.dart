@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 class UserInfoModPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -128,6 +130,7 @@ class UserInfoModPageState extends State<UserInfoModPage> {
                           ),
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();
+                            Navigator.pushReplacementNamed(context, '/home');
                             Navigator.pushNamed(context, '/login');
                           },
                         ),
