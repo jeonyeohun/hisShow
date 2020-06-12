@@ -21,21 +21,34 @@ class ModPage extends StatefulWidget {
 
 class AddPageSate extends State<ModPage> {
   static TextEditingController titleText =
-      TextEditingController(text: record.title);
+      TextEditingController();
   static TextEditingController priceText =
-      TextEditingController(text: record.price);
+      TextEditingController();
   static TextEditingController desText =
-      TextEditingController(text: record.description);
+      TextEditingController();
   static TextEditingController bankText =
-      TextEditingController(text: record.bank);
+      TextEditingController();
   static TextEditingController accountText =
-      TextEditingController(text: record.bankAccount);
+      TextEditingController();
   static TextEditingController ownerText =
-      TextEditingController(text: record.group);
+      TextEditingController();
   static TextEditingController groupdesText =
-      TextEditingController(text: record.groupDes);
+      TextEditingController();
   static TextEditingController placeText =
-      TextEditingController(text: record.place);
+      TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    titleText.text = record.title;
+    priceText.text = record.price;
+    desText.text = record.description;
+    bankText.text = record.bank;
+    accountText.text = record.bankAccount;
+    ownerText.text = record.group;
+    groupdesText.text = record.groupDes;
+    placeText.text = record.place;
+  }
 
   final String uuid = Uuid().v1();
 
