@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:csee/reservelist.dart';
-import 'package:csee/userInfo.dart';
 import 'package:csee/userinfomod.dart';
 import 'package:flutter/material.dart';
 import 'show_list.dart';
@@ -25,6 +24,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = 0;
+  }
 
   void onTapped(int index) {
     setState(() {
