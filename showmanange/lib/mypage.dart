@@ -249,7 +249,7 @@ class ReservationListState extends State<ReservationList> {
                               ],
                             ),
                           ),
-                          Center(
+                          Flexible(
                             child:
                                 Text(widget.record.reservation[uid].toString()),
                           ),
@@ -261,7 +261,7 @@ class ReservationListState extends State<ReservationList> {
                                   child: RaisedButton(
                                     child: widget.record.resConfirm[uid] == true
                                         ? Text('승인완료')
-                                        : Text('승인대기'),
+                                        : Text('대기'),
                                     onPressed: () async {
                                       showCupertinoDialog(
                                         context: context,
@@ -327,12 +327,12 @@ class ReservationListState extends State<ReservationList> {
                                                     '확인'
                                                 ),
                                                 onPressed: () async{
-                                                  widget.record.resConfirm.remove(UserInfoRecord.currentUser.uid);
-                                                  List list = widget.record.reservation[UserInfoRecord.currentUser.uid];
+                                                  widget.record.resConfirm.remove(uid);
+                                                  List list = widget.record.reservation[uid];
                                                   list.forEach((element) {
                                                     widget.record.seats[element] = false;
                                                   });
-                                                  widget.record.reservation.remove(UserInfoRecord.currentUser.uid);
+                                                  widget.record.reservation.remove(uid);
 
                                                   await Firestore.instance.collection('Shows').document(widget.record.reference.documentID).updateData(
                                                       {
