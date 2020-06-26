@@ -20,6 +20,31 @@
 
 ## Database Structure
 
+```
+UserInfo
+    uid
+        name(String)
+        phoneNum(String)
+
+Shows
+    showid
+        bank(String)
+        bankAccount(String)
+        description(String)
+        group(String)
+        groupdescription(String)
+        imageURL(String)
+        place(String)
+        price(String)
+        time(DateTime)
+        title(String)
+        uid(String)
+        resConfrim
+            uid(String) : status(bool)
+        reservation
+            uid(String) : seatNum(String)
+```
+
 ## Application Functions
 
 어플리케이션의 각 화면과 주요기능들에 대한 요약입니다. 자세한 구현과 고민들은 개발일지에 담았습니다.
@@ -61,8 +86,6 @@
 | ![예약 목록](https://github.com/jeonyeohun/hisShow/blob/master/assets/screenshots/my_show.png?raw=true) | ![예약자 관리](https://github.com/jeonyeohun/hisShow/blob/master/assets/screenshots/reservation_check.png?raw=true) | ![예약 승인](https://github.com/jeonyeohun/hisShow/blob/master/assets/screenshots/reservation_dialog.png?raw=true) |
 
 ### 공연 등록/수정/삭제
-
-### 예약 확인
 
 |                                                   등록                                                   |                                                   수정                                                   |                                                  삭제                                                  |
 | :------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
