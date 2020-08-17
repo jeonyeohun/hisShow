@@ -97,6 +97,8 @@ Shows
 
 - [로그인 페이지](https://jeonyeohun.github.io/2020/06/29/hisShow-%EB%A1%9C%EA%B7%B8%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80.html)
 - [공연목록 페이지](https://jeonyeohun.github.io/2020/06/29/hisShow-%EA%B3%B5%EC%97%B0%EB%AA%A9%EB%A1%9D%ED%8E%98%EC%9D%B4%EC%A7%80.html)
+- [공연 세부정보 페이지](https://jeonyeohun.github.io/2020/08/17/hisShow-%EA%B3%B5%EC%97%B0%EC%98%88%EC%95%BD%ED%8E%98%EC%9D%B4%EC%A7%80.html)
+- [공연 예약 페이지](https://jeonyeohun.github.io/2020/08/17/hisShow-%EA%B3%B5%EC%97%B0%EC%98%88%EC%95%BD%ED%8E%98%EC%9D%B4%EC%A7%80.html)
 
 ## Demo Video
 
