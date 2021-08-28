@@ -15,7 +15,7 @@
 
 ## Design Prototype
 
-<img src="https://jeonyeohun.github.io/assets/post_images/hisShow_prototyping.png" />
+<img src="https://github.com/jeonyeohun/jeonyeohun.github.io/blob/main/content/blog/assets/post_images/hisShow_prototyping.png?raw=true" />
 <br>
 
 ## Database Structure
